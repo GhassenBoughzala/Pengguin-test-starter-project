@@ -27,7 +27,7 @@ const handleTheme = (mode) => {
         : lightTheme;
 
     default:
-      return darkTheme;
+      return lightTheme;
   }
 };
 
