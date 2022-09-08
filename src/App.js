@@ -5,30 +5,15 @@ import { useSelector } from "react-redux";
 import "styles/globalStyles.css";
 
 function App() {
-  const { mode } = useSelector((state) => state.theme);
+  const mode  = useSelector((state) => state.theme);
   return (
-    <ThemeProvider theme={handleTheme(mode)}>
+    <ThemeProvider theme={mode.dark ? darkTheme : lightTheme}>
       <CssBaseline />
       <RouterConfig />
     </ThemeProvider>
   );
 }
 
-const handleTheme = (mode) => {
-  switch (mode) {
-    case "light":
-      return lightTheme;
-    case "dark":
-      return darkTheme;
-    case "browser":
-      return window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? darkTheme
-        : lightTheme;
 
-    default:
-      return lightTheme;
-  }
-};
 
 export default App;

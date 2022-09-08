@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  mode: "browser" || "light" || "dark",
+  dark: true,
 };
 
 const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
-    setThemeMode: (state, action) => {
-      state.mode = action.payload;
+    setThemeMode: (state) => {
+      state.dark = !state.dark
     },
   },
 });

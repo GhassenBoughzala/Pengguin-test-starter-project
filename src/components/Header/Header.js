@@ -7,6 +7,8 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { MaterialUISwitch } from "./Header.styles";
 import { Grid } from "@mui/material";
+import { setThemeMode } from "redux/theme.slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,7 +52,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+export default function Header() {
+  const dispatch = useDispatch();
+  const mode = useSelector((state) => state.theme);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -71,7 +76,10 @@ export default function SearchAppBar() {
               />
             </Search>
           </Grid>
-          <MaterialUISwitch />
+          <MaterialUISwitch
+            checked={mode.dark}
+            onChange={() => dispatch(setThemeMode())}
+          />
         </Toolbar>
       </AppBar>
     </Box>
