@@ -16,31 +16,20 @@ import Card from "@mui/material/Card";
 import AddIcon from "@mui/icons-material/Add";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import SearchIcon from "@mui/icons-material/Search";
-import { setThemeMode } from "redux/theme.slice";
-import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import { AllPopular } from "redux/tv-shows/tvActions";
 import "../../styles/loading.css";
-import {
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-  MaterialUISwitch,
-} from "./Home.styles";
+
 import { useState } from "react";
+import Header from "components/Header";
 
 const Home = ({ ...props }) => {
   useEffect(() => {
     props.AllPo();
   }, []);
   const data = props.ListPo;
-  const dispatch = useDispatch();
-  const mode = useSelector((state) => state.theme);
   const [SearchIn, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
 
@@ -57,36 +46,7 @@ const Home = ({ ...props }) => {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Start searching"
-                  inputProps={{ "aria-label": "search" }}
-                  onChange={(event) => {
-                    setSearch(event.target.value);
-                  }}
-                />
-              </Search>
-            </Grid>
-
-            <MaterialUISwitch
-              checked={mode.dark}
-              onChange={() => dispatch(setThemeMode())}
-            />
-          </Toolbar>
-        </AppBar>
-      </Box>
+      <Header {...{ SearchIn, setSearch }} />
       <Container>
         <Box sx={{ height: "100vh" }}>
           <Typography
