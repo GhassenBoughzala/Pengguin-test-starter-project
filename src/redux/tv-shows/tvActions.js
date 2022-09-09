@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { axiosTMDB } from "utils/axios";
 import { GET_TV_F, GET_TV_S, LOADING_TV } from "./tvTypes";
-
+import { toast } from "react-toastify";
 
 export const FetchPopular = () => axiosTMDB.get(`tv/popular`);
 export const AllPopular = () => (dispatch) => {
@@ -14,7 +14,7 @@ export const AllPopular = () => (dispatch) => {
           payload: res.data.results,
         });
       })
-      .catch((err) => console.log(err), GET_TV_F)
-      500;
+      .catch((err) => console.log(err), GET_TV_F, toast.error("Something went wrong !"))
+      1000;
   });
 };
