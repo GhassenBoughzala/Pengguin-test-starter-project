@@ -71,7 +71,7 @@ export default function Header() {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search…"
+                placeholder="Start searching"
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
