@@ -21,7 +21,7 @@ import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import { AllPopular } from "redux/tv-shows/tvActions";
 import "../../styles/loading.css";
-
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Header from "components/Header";
 
@@ -29,6 +29,7 @@ const Home = ({ ...props }) => {
   useEffect(() => {
     props.AllPo();
   }, []);
+  let nav = useNavigate()
   const data = props.ListPo;
   const [SearchIn, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
@@ -85,7 +86,7 @@ const Home = ({ ...props }) => {
                           <Card sx={{ width: 270, height: 530, mb: 2 }}>
                             <CardActionArea
                               onClick={() => {
-                                console.log("Hi");
+                                nav(`show/${tv.id}`);
                               }}
                             >
                               <CardMedia
