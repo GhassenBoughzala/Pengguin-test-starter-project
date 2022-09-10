@@ -7,6 +7,7 @@ import {
   GET_IMAGES_F,
   GET_TV_F,
   GET_TV_S,
+  LOADING_DET,
   LOADING_IMG,
   LOADING_TV,
 } from "./tvTypes";
@@ -29,7 +30,7 @@ export const AllPopular = () => (dispatch) => {
 
 export const FetchOne = (id) => axiosTMDB.get(`tv/` + id);
 export const GetDetails = (id) => (dispatch) => {
-  dispatch({ type: LOADING_TV });
+  dispatch({ type: LOADING_DET });
   setTimeout(() => {
     FetchOne(id)
       .then((res) => {

@@ -12,10 +12,13 @@ import {
 import { Grid } from "@mui/material";
 import { setThemeMode } from "redux/theme.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
 
 const Header = ({ ...props }) => {
   const dispatch = useDispatch();
   const mode = useSelector((state) => state.theme);
+  let nav = useNavigate();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -40,6 +43,13 @@ const Header = ({ ...props }) => {
               />
             </Search>
           </Grid>
+          <HomeIcon
+            fontSize="large"
+            variant="outlined"
+            onClick={() => {
+              nav(`/`);
+            }}
+          />
           <MaterialUISwitch
             checked={mode.dark}
             onChange={() => dispatch(setThemeMode())}

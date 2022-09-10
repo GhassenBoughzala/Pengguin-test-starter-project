@@ -8,6 +8,7 @@ import {
   GET_IMAGES_F,
   GET_TV_F,
   GET_TV_S,
+  LOADING_DET,
   LOADING_IMG,
   LOADING_TV,
 } from "./tvTypes";
@@ -18,6 +19,7 @@ const intialState = {
   details: {},
   loading: false,
   loadingBg: false,
+  loadingDet: false,
 };
 
 export default function (state = intialState, action) {
@@ -29,8 +31,10 @@ export default function (state = intialState, action) {
     case GET_TV_F:
       return toast.error("Something went wrong !");
 
+    case LOADING_DET:
+      return { ...state, popular: [], loadingDet: true };
     case GET_DETAILS_S:
-      return { ...state, details: { ...action.payload }, loading: false };
+      return { ...state, details: { ...action.payload }, loadingDet: false };
     case GET_DETAILS_F:
       return toast.error("Details: Something went wrong !");
 
