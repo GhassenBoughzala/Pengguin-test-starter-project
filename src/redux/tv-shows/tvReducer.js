@@ -1,24 +1,23 @@
 /* eslint-disable no-fallthrough */
 /* eslint-disable import/no-anonymous-default-export */
-import { toast } from "react-toastify";
 import {
   GET_DETAILS_F,
   GET_DETAILS_S,
-  GET_IMAGES,
-  GET_IMAGES_F,
+  GET_SEASON,
+  GET_SEASON_F,
   GET_TV_F,
   GET_TV_S,
   LOADING_DET,
-  LOADING_IMG,
+  LOADING_SE,
   LOADING_TV,
 } from "./tvTypes";
 
 const intialState = {
   popular: [],
-  backdrops: [],
   details: {},
+  season: {},
   loading: false,
-  loadingBg: false,
+  loadingSe: false,
   loadingDet: false,
 };
 
@@ -29,21 +28,18 @@ export default function (state = intialState, action) {
     case GET_TV_S:
       return { ...state, popular: [...action.payload], loading: false };
     case GET_TV_F:
-      return toast.error("Something went wrong !");
 
     case LOADING_DET:
       return { ...state, popular: [], loadingDet: true };
     case GET_DETAILS_S:
       return { ...state, details: { ...action.payload }, loadingDet: false };
     case GET_DETAILS_F:
-      return toast.error("Details: Something went wrong !");
 
-    case LOADING_IMG:
-      return { ...state, backdrops: [], loadingBg: false };
-    case GET_IMAGES:
-      return { ...state, backdrops: [...action.payload], loadingBg: false };
-    case GET_IMAGES_F:
-      return toast.error("Images: Something went wrong !");
+    case LOADING_SE:
+      return { ...state, season: {}, loadingSe: true };
+    case GET_SEASON:
+      return { ...state, season: { ...action.payload }, loadingSe: false };
+    case GET_SEASON_F:
 
     default:
       return state;

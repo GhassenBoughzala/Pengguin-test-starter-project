@@ -4,16 +4,12 @@
 /* eslint-disable no-labels */
 /* eslint-disable no-unused-labels */
 import {
-  Button,
-  CardActions,
   Box,
   Container,
-  CardContent,
-  CardActionArea,
   Grid,
   Typography,
   Toolbar,
-  AppBar,
+  InputLabel,
 } from "@mui/material";
 
 import List from "@mui/material/List";
@@ -21,18 +17,18 @@ import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import React, { Fragment, useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { GetDetails, GetImages } from "redux/tv-shows/tvActions";
+import { GetDetails, GetSeason } from "redux/tv-shows/tvActions";
 import "../../styles/loading.css";
 import "../../styles/card.scss";
 import Header from "components/Header";
+import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
+const Soon = require("../../assets/img/ComingSoon.png");
 
 const Details = ({ ...props }) => {
   const dispatch = useDispatch();
@@ -42,11 +38,11 @@ const Details = ({ ...props }) => {
     dispatch(GetDetails(params.showId));
   }, []);
 
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState("");
   const handleChange = (event) => {
     setSelected(event.target.value);
+    dispatch(GetSeason(params.showId, event.target.value));
   };
-  console.log(selected);
 
   return (
     <>
@@ -102,25 +98,29 @@ const Details = ({ ...props }) => {
               </div>
 
               <Toolbar>
-                <Grid container spacing={2} justifyItems={"flex-end"}>
-                  <Grid item xs={6}>
+                <Grid container spacing={2}>
+                  <Grid item xs={2}>
                     <Typography variant="h4">Episodes</Typography>
                   </Grid>
-                  <Grid item xs={6} alignContent="flex-end">
+                  <Grid item xs={8}></Grid>
+                  <Grid item xs={2} alignContent="flex-end">
                     <FormControl
-                      sx={{ minWidth: 180, paddingLeft: 50 }}
+                      sx={{ minWidth: 200 }}
                       size="small"
+                      variant="filled"
                     >
+                      <InputLabel id="select-season">Seasons</InputLabel>
                       <Select
-                        labelId="demo-select-small"
+                        labelId="select-season"
                         id="demo-select-small"
+                        label="Seasons"
                         value={selected}
                         onChange={handleChange}
                       >
                         {props.tv.seasons?.map((s, index) => {
                           return (
                             <MenuItem key={index} value={s.season_number}>
-                              {s.name}({s.episode_count} episodes)
+                              {s.name} ({s.episode_count} episodes)
                             </MenuItem>
                           );
                         })}
@@ -129,34 +129,57 @@ const Details = ({ ...props }) => {
                   </Grid>
                 </Grid>
               </Toolbar>
-
-              <List>
-                <ListItem alignItems="flex-start">
-                  <Grid container spacing={2}>
-                    <Grid item xs={1}>
-                      <ListItem>
-                        <Typography variant="h5">1</Typography>
-                      </ListItem>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <ListItemAvatar>
-                        <img
-                          height="100"
-                          className="locandina"
-                          src={`https://image.tmdb.org/t/p/w500${props.tv.poster_path}`}
-                        />
-                      </ListItemAvatar>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <ListItemText
-                        primary="Brunch this weekend?"
-                        secondary=" — I'll be in your neighborhood doing errands this…"
-                      />
-                    </Grid>
-                  </Grid>
-                </ListItem>
-                <Divider variant="inset" component="li" />
-              </List>
+              {selected && (
+                <List>
+                  {props.season.episodes?.map((ep, index) => {
+                    return (
+                      <Fragment key={index}>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 1.5 }}
+                        >
+                          <ListItem>
+                            <Grid container spacing={2}>
+                              <Grid item xs={1}>
+                                <ListItem>
+                                  <Typography
+                                    variant="h4"
+                                    align="center"
+                                    margin={3}
+                                  >
+                                    {ep.episode_number}
+                                  </Typography>
+                                </ListItem>
+                              </Grid>
+                              <Grid item xs={2}>
+                                <ListItemAvatar>
+                                  <img
+                                    height="100"
+                                    className="locandina"
+                                    src={
+                                      ep.still_path
+                                        ? `https://image.tmdb.org/t/p/w500${ep.still_path}`
+                                        : Soon
+                                    }
+                                  />
+                                </ListItemAvatar>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <ListItemText
+                                  primary={ep.name}
+                                  secondary={ep.overview}
+                                />
+                              </Grid>
+                            </Grid>
+                          </ListItem>
+                          <Divider variant="middle" />
+                        </motion.div>
+                      </Fragment>
+                    );
+                  })}
+                </List>
+              )}
             </Box>
           </>
         )}
@@ -167,12 +190,9 @@ const Details = ({ ...props }) => {
 
 const mapStateToProps = (state) => ({
   tv: state.tvshows.details,
-  Bg: state.tvshows.backdrops,
+  season: state.tvshows.season,
   isLoading: state.tvshows.loadingDet,
-  isLoadingBg: state.tvshows.loadingBg,
+  isLoadingSe: state.tvshows.loadingSe,
 });
-const mapActionsToProps = {
-  One: GetDetails,
-  Images: GetImages,
-};
-export default connect(mapStateToProps, mapActionsToProps)(Details);
+
+export default connect(mapStateToProps)(Details);

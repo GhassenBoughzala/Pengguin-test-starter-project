@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-expressions */
 import { axiosTMDB } from "utils/axios";
+import { toast } from "react-toastify";
 import {
   GET_DETAILS_F,
   GET_DETAILS_S,
-  GET_IMAGES,
-  GET_IMAGES_F,
+  GET_SEASON,
+  GET_SEASON_F,
   GET_TV_F,
   GET_TV_S,
   LOADING_DET,
-  LOADING_IMG,
+  LOADING_SE,
   LOADING_TV,
 } from "./tvTypes";
 
@@ -22,6 +23,7 @@ export const AllPopular = () => (dispatch) => {
           type: GET_TV_S,
           payload: res.data.results,
         });
+        res.status !== 200 && toast.error("Something went wrong !");
       })
       .catch((err) => console.log(err), GET_TV_F);
     1000;
@@ -38,24 +40,27 @@ export const GetDetails = (id) => (dispatch) => {
           type: GET_DETAILS_S,
           payload: res.data,
         });
+        res.status !== 200 && toast.warn("Something went wrong !");
       })
       .catch((err) => console.log(err), GET_DETAILS_F);
     1000;
   });
 };
 
-export const FetchImages = (id) => axiosTMDB.get(`tv/` + id + `/images`);
-export const GetImages = (id) => (dispatch) => {
-  dispatch({ type: LOADING_IMG });
+export const FetchSeason = (id, num) =>
+  axiosTMDB.get(`tv/` + id + `/season/` + num);
+export const GetSeason = (id, num) => (dispatch) => {
+  dispatch({ type: LOADING_SE });
   setTimeout(() => {
-    FetchImages(id)
+    FetchSeason(id, num)
       .then((res) => {
         dispatch({
-          type: GET_IMAGES,
-          payload: res.data.backdrops,
+          type: GET_SEASON,
+          payload: res.data,
         });
+        res.status !== 200 && toast.warn("Something went wrong !");
       })
-      .catch((err) => console.log(err), GET_IMAGES_F);
+      .catch((err) => console.log(err), GET_SEASON_F);
     1000;
   });
 };
