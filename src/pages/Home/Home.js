@@ -29,7 +29,7 @@ const Home = ({ ...props }) => {
   useEffect(() => {
     props.AllPo();
   }, []);
-  let nav = useNavigate()
+  let nav = useNavigate();
   const data = props.ListPo;
   const [SearchIn, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
@@ -56,7 +56,9 @@ const Home = ({ ...props }) => {
             sx={{ p: 4, pb: 4 }}
             textAlign="center"
           >
-            {filtered.length === 0 && `No results for your query ${SearchIn}`}
+            {SearchIn &&
+              filtered.length === 0 &&
+              `No results for your query ${SearchIn}`}
             {SearchIn &&
               filtered.length !== 0 &&
               `You are searching for ${SearchIn}`}

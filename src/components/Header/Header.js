@@ -9,7 +9,7 @@ import {
   StyledInputBase,
   MaterialUISwitch,
 } from "./Header.styles";
-import { Grid } from "@mui/material";
+import { Grid, IconButton, Tooltip } from "@mui/material";
 import { setThemeMode } from "redux/theme.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -43,13 +43,18 @@ const Header = ({ ...props }) => {
               />
             </Search>
           </Grid>
-          <HomeIcon
-            fontSize="large"
-            variant="outlined"
-            onClick={() => {
-              nav(`/`);
-            }}
-          />
+          <Tooltip title="Delete">
+            <IconButton>
+              <HomeIcon
+                fontSize="large"
+                cur
+                onClick={() => {
+                  nav(`/`);
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+
           <MaterialUISwitch
             checked={mode.dark}
             onChange={() => dispatch(setThemeMode())}
