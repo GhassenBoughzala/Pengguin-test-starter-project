@@ -3,17 +3,18 @@
 /* eslint-disable no-labels */
 /* eslint-disable no-unused-labels */
 import {
-  Button,
-  CardActions,
   Box,
   Container,
   CardContent,
-  CardActionArea,
   Grid,
+  IconButton,
+  CardActionArea,
+  Button,
 } from "@mui/material";
 //import Grid from "@mui/material/Unstable_Grid2";
 import Card from "@mui/material/Card";
 import AddIcon from "@mui/icons-material/Add";
+import InfoIcon from "@mui/icons-material/Info";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
@@ -24,6 +25,13 @@ import "../../styles/loading.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Header from "components/Header";
+import {
+  Image,
+  ImageBackdrop,
+  ImageButton,
+  ImageMarked,
+  ImageSrc,
+} from "./Home.styles";
 
 const Home = ({ ...props }) => {
   useEffect(() => {
@@ -33,6 +41,7 @@ const Home = ({ ...props }) => {
   const data = props.ListPo;
   const [SearchIn, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
+  const [hover, sethover] = useState(false);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -58,10 +67,10 @@ const Home = ({ ...props }) => {
           >
             {SearchIn &&
               filtered.length === 0 &&
-              `No results for your query ${SearchIn}`}
+              `No results for your query "${SearchIn}"`}
             {SearchIn &&
               filtered.length !== 0 &&
-              `You are searching for ${SearchIn}`}
+              `You are searching for "${SearchIn}"`}
             {!SearchIn && filtered.length !== 0 && "TV Shows"}
           </Typography>
           <Grid
@@ -85,33 +94,84 @@ const Home = ({ ...props }) => {
                           animate={{ opacity: 1 }}
                           transition={{ duration: 1.5 }}
                         >
-                          <Card sx={{ width: 270, height: 530, mb: 2 }}>
+                          <Card
+                            sx={{
+                              width: 270,
+                              height: 545,
+                              mb: 1,
+                              display: "flex",
+                              justiyContent: "space-between",
+                              flexDirection: "column",
+                            }}
+                          >
+                            {/*                             
                             <CardActionArea
+                              onMouseOver={() => sethover(true)}
+                              onMouseOut={() => sethover(false)}
                               onClick={() => {
                                 nav(`show/${tv.id}`);
                               }}
                             >
                               <CardMedia
                                 component="img"
-                                height="380"
+                                height="400"
                                 image={`https://image.tmdb.org/t/p/w500${tv.poster_path}`}
                                 alt=""
+                              ></CardMedia>
+                            </CardActionArea> 
+                            */}
+
+                            <ImageButton
+                              focusRipple
+                              key={tv.name}
+                              style={{ height: 400 }}
+                              onClick={() => {
+                                nav(`show/${tv.id}`);
+                              }}
+                            >
+                              <ImageSrc
+                                style={{
+                                  backgroundImage: `url(https://image.tmdb.org/t/p/w500${tv.poster_path})`,
+                                  height: 400,
+                                }}
                               />
-                              <CardContent>
-                                <Typography
-                                  gutterBottom
-                                  variant="h5"
-                                  component="div"
+                              <ImageBackdrop className="MuiImageBackdrop-root">
+                                <Grid
+                                  container
+                                  spacing={1}
+                                  direction="row"
+                                  justifyContent="center"
+                                  alignItems="center"
+                                  sx={{ mt: 22, opacity:100 }}
                                 >
-                                  {tv.name}
-                                </Typography>
-                              </CardContent>
-                            </CardActionArea>
-                            <CardActions sx={{ position: "absolute" }}>
-                              <Button size="small" startIcon={<AddIcon />}>
-                                Add to watchlist
+                                  <InfoIcon fontSize="large" />
+                                </Grid>
+                                <ImageMarked>
+                                  <Typography>SHOW DETAILS</Typography>
+                                </ImageMarked>
+                              </ImageBackdrop>
+                            </ImageButton>
+                            <CardContent>
+                              <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="div"
+                              >
+                                {tv.name}
+                              </Typography>
+                              <Button
+                                sx={{ height: 40, width: 180, ml: 3, mr: 3 }}
+                                color="inherit"
+                                variant="text"
+                                onClick={() => {
+                                  nav(`/`);
+                                }}
+                                startIcon={<AddIcon />}
+                                size="small"
+                              >
+                                ADD TO WATCHLIST
                               </Button>
-                            </CardActions>
+                            </CardContent>
                           </Card>
                         </motion.div>
                       </Grid>

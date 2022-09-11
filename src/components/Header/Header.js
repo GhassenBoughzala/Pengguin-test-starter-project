@@ -9,11 +9,12 @@ import {
   StyledInputBase,
   MaterialUISwitch,
 } from "./Header.styles";
-import { Grid, IconButton } from "@mui/material";
+import { Button, Grid, IconButton } from "@mui/material";
 import { setThemeMode } from "redux/theme.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
+import ListIcon from "@mui/icons-material/List";
 
 const Header = ({ ...props }) => {
   const dispatch = useDispatch();
@@ -44,6 +45,17 @@ const Header = ({ ...props }) => {
               />
             </Search>
           </Grid>
+          <Button
+            sx={{ height: 30, mr: 1 }}
+            color="inherit"
+            variant="outlined"
+            onClick={() => {
+              nav(`/`);
+            }}
+            startIcon={<ListIcon />}
+          >
+            WATCHLIST
+          </Button>
           <IconButton
             onClick={() => {
               nav(`/`);
@@ -51,6 +63,7 @@ const Header = ({ ...props }) => {
           >
             <HomeIcon fontSize="large" />
           </IconButton>
+
           <MaterialUISwitch
             checked={mode.dark}
             onChange={() => dispatch(setThemeMode())}
