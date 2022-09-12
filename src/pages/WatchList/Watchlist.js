@@ -10,9 +10,7 @@ import {
   CardActionArea,
   Button,
 } from "@mui/material";
-//import Grid from "@mui/material/Unstable_Grid2";
 import Card from "@mui/material/Card";
-import AddIcon from "@mui/icons-material/Add";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
@@ -38,7 +36,6 @@ const WatchList = ({ ...props }) => {
   });
   const [SearchIn, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
-  const data = LocalWatch;
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -56,6 +53,20 @@ const WatchList = ({ ...props }) => {
     localStorage.setItem("watchlist", JSON.stringify(filtered));
     window.location.reload();
   };
+  
+  const uniqueIds = [];
+  const data = LocalWatch.filter((element) => {
+    const isDuplicate = uniqueIds.includes(element.id);
+    if (!isDuplicate) {
+      uniqueIds.push(element.id);
+      return true;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("watchlist", JSON.stringify(data));
+  }, [LocalWatch]);
 
   return (
     <>
@@ -75,6 +86,7 @@ const WatchList = ({ ...props }) => {
               filtered.length !== 0 &&
               `You are searching for "${SearchIn}"`}
             {!SearchIn && filtered.length !== 0 && "Watch List"}
+            {!SearchIn && data.length === 0 && "Your watch list is empty"}
           </Typography>
           <Grid
             container
@@ -91,11 +103,11 @@ const WatchList = ({ ...props }) => {
                 {data.map((tv, index) => {
                   return (
                     <Fragment key={index}>
-                      <Grid item xs={2} lg={3}>
+                      <Grid item xs={2} lg={3} key={tv.id}>
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ duration: 1 }}
+                          transition={{ duration: 0.5 }}
                         >
                           <Card
                             sx={{
@@ -109,7 +121,7 @@ const WatchList = ({ ...props }) => {
                           >
                             <CardActionArea
                               onClick={() => {
-                                nav(`show/${tv.id}`);
+                                nav(`/show/${tv.id}`);
                               }}
                             >
                               <CardMedia
