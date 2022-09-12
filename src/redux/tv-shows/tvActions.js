@@ -43,7 +43,7 @@ export const GetDetails = (id) => (dispatch) => {
         res.status !== 200 && toast.warn("Something went wrong !");
       })
       .catch((err) => console.log(err), GET_DETAILS_F);
-    1000;
+    3000;
   });
 };
 

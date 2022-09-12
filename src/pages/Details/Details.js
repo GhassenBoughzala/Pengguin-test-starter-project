@@ -48,7 +48,7 @@ const Details = ({ ...props }) => {
     <>
       <Header />
       <Container>
-        {props.isLoading && !props.tv ? (
+        {props.isLoading ? (
           <Grid
             container
             direction="row"
@@ -61,7 +61,13 @@ const Details = ({ ...props }) => {
         ) : (
           <>
             <Box sx={{ height: "100vh" }}>
-              <div className="movie_card" id="bright">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1 }}
+                className="movie_card"
+                id="bright"
+              >
                 <div className="info_section">
                   <div className="movie_header">
                     <img
@@ -95,9 +101,9 @@ const Details = ({ ...props }) => {
                     backgroundImage: `url(https://image.tmdb.org/t/p/original${props.tv.backdrop_path})`,
                   }}
                 ></div>
-              </div>
+              </motion.div>
 
-              <Toolbar>
+              <Toolbar sx={{ mt: 2 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={2}>
                     <Typography variant="h4">Episodes</Typography>
@@ -139,21 +145,21 @@ const Details = ({ ...props }) => {
                           animate={{ opacity: 1 }}
                           transition={{ duration: 1.5 }}
                         >
-                          <ListItem>
+                          <>
                             <Grid container spacing={2}>
                               <Grid item xs={1}>
                                 <ListItem>
                                   <Typography
                                     variant="h4"
                                     align="center"
-                                    margin={3}
+                                    margin={4}
                                   >
                                     {ep.episode_number}
                                   </Typography>
                                 </ListItem>
                               </Grid>
                               <Grid item xs={2}>
-                                <ListItemAvatar>
+                                <ListItemAvatar sx={{ m: 1 }}>
                                   <img
                                     height="100"
                                     className="locandina"
@@ -166,13 +172,13 @@ const Details = ({ ...props }) => {
                                 </ListItemAvatar>
                               </Grid>
                               <Grid item xs={8}>
-                                <ListItemText
-                                  primary={ep.name}
-                                  secondary={ep.overview}
-                                />
+                                <Typography variant="h5" sx={{mt:1}}>{ep.name}</Typography>
+                                <Typography variant={'body1'} color={"GrayText"}>
+                                  {ep.overview}
+                                </Typography>
                               </Grid>
                             </Grid>
-                          </ListItem>
+                          </>
                           <Divider variant="middle" />
                         </motion.div>
                       </Fragment>

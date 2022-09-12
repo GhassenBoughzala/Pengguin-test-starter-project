@@ -11,10 +11,11 @@ import {
 } from "./Header.styles";
 import { Button, Grid, IconButton } from "@mui/material";
 import { setThemeMode } from "redux/theme.slice";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
+import { useState } from "react";
 
 const Header = ({ ...props }) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const Header = ({ ...props }) => {
             direction="row"
             justifyContent="center"
             alignItems="center"
-            sx={{ paddingLeft: 12 }}
+            sx={{ paddingLeft: 25 }}
           >
             <Search>
               <SearchIconWrapper>
@@ -46,11 +47,11 @@ const Header = ({ ...props }) => {
             </Search>
           </Grid>
           <Button
-            sx={{ height: 30, mr: 1 }}
+            sx={{ height: 30, mr: 1, width: 200 }}
             color="inherit"
             variant="outlined"
             onClick={() => {
-              nav(`/`);
+              nav(`/watchlist`);
             }}
             startIcon={<ListIcon />}
           >
@@ -74,4 +75,8 @@ const Header = ({ ...props }) => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => ({
+  WatchList: state.tvshows.watch,
+});
+
+export default connect(mapStateToProps)(Header);

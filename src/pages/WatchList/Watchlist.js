@@ -13,7 +13,7 @@ import {
 //import Grid from "@mui/material/Unstable_Grid2";
 import Card from "@mui/material/Card";
 import AddIcon from "@mui/icons-material/Add";
-//import DoneIcon from '@mui/icons-material/Done';
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
@@ -25,15 +25,20 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Header from "components/Header";
 
-const Home = ({ ...props }) => {
+const WatchList = ({ ...props }) => {
   useEffect(() => {
     props.AllPo();
   }, []);
   let nav = useNavigate();
-  const data = props.ListPo;
+
+  const [LocalWatch] = useState(() => {
+    const saved = localStorage.getItem("watchlist");
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
   const [SearchIn, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
-  const [WatchList, setWatchList] = useState([]);
+  const data = LocalWatch;
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -46,21 +51,11 @@ const Home = ({ ...props }) => {
     return () => clearTimeout(delayDebounceFn);
   }, [SearchIn, filtered]);
 
-  console.log(WatchList);
-  useEffect(() => {
-    setWatchList(LocalWatch)
-  }, [WatchList]);
-  const AddToWatch = (tv) => {
-    
-    WatchList.push(tv);
-    localStorage.setItem("watchlist", JSON.stringify(WatchList));
+  const RemoveShow = async (e) => {
+    const filtered = LocalWatch.filter((item, index) => index !== e);
+    localStorage.setItem("watchlist", JSON.stringify(filtered));
+    window.location.reload();
   };
-
-  const [LocalWatch] = useState(() => {
-    const saved = localStorage.getItem("watchlist");
-    const initialValue = JSON.parse(saved);
-    return initialValue || "";
-  });
 
   return (
     <>
@@ -79,25 +74,24 @@ const Home = ({ ...props }) => {
             {SearchIn &&
               filtered.length !== 0 &&
               `You are searching for "${SearchIn}"`}
-            {!SearchIn && filtered.length !== 0 && "TV Shows"}
+            {!SearchIn && filtered.length !== 0 && "Watch List"}
           </Typography>
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+          >
             {props.isLoading ? (
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                padding={10}
-              >
+              <div>
                 <div id="loading"></div>
-              </Grid>
+              </div>
             ) : (
               <>
-                {filtered.map((tv, index) => {
+                {data.map((tv, index) => {
                   return (
                     <Fragment key={index}>
-                      <Grid item xs={12} md={4} lg={3}>
+                      <Grid item xs={2} lg={3}>
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -106,7 +100,7 @@ const Home = ({ ...props }) => {
                           <Card
                             sx={{
                               width: 270,
-                              height: 515,
+                              height: 510,
                               mb: 1,
                               display: "flex",
                               justiyContent: "space-between",
@@ -134,14 +128,18 @@ const Home = ({ ...props }) => {
                                 {tv.name}
                               </Typography>
                               <Button
-                                sx={{ height: 40, width: 230 }}
+                                sx={{
+                                  height: 40,
+                                  width: 230,
+                                  justifyContent: "center",
+                                }}
                                 color="inherit"
                                 variant="text"
-                                onClick={() => AddToWatch(tv)}
-                                startIcon={<AddIcon />}
+                                onClick={() => RemoveShow(index)}
+                                startIcon={<RemoveCircleOutlineIcon />}
                                 size="small"
                               >
-                                ADD TO WATCHLIST
+                                REMOVE FROM WATCHLIST
                               </Button>
                             </CardContent>
                           </Card>
@@ -166,4 +164,4 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
   AllPo: AllPopular,
 };
-export default connect(mapStateToProps, mapActionsToProps)(Home);
+export default connect(mapStateToProps, mapActionsToProps)(WatchList);
