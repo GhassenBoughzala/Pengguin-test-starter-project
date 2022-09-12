@@ -10,10 +10,9 @@ import {
   CardActionArea,
   Button,
 } from "@mui/material";
-//import Grid from "@mui/material/Unstable_Grid2";
 import Card from "@mui/material/Card";
 import AddIcon from "@mui/icons-material/Add";
-//import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from "@mui/icons-material/Done";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
@@ -24,6 +23,7 @@ import "../../styles/loading.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Header from "components/Header";
+import { toast } from "react-toastify";
 
 const Home = ({ ...props }) => {
   useEffect(() => {
@@ -46,14 +46,14 @@ const Home = ({ ...props }) => {
     return () => clearTimeout(delayDebounceFn);
   }, [SearchIn, filtered]);
 
-  console.log(WatchList);
   useEffect(() => {
-    setWatchList(LocalWatch)
+    setWatchList(LocalWatch);
   }, [WatchList]);
+
   const AddToWatch = (tv) => {
-    
     WatchList.push(tv);
     localStorage.setItem("watchlist", JSON.stringify(WatchList));
+    toast.success("Successfully added");
   };
 
   const [LocalWatch] = useState(() => {
@@ -79,7 +79,7 @@ const Home = ({ ...props }) => {
             {SearchIn &&
               filtered.length !== 0 &&
               `You are searching for "${SearchIn}"`}
-            {!SearchIn && filtered.length !== 0 && "TV Shows"}
+            {!SearchIn && filtered.length !== 0 && "Popular TV Shows"}
           </Typography>
           <Grid container spacing={2}>
             {props.isLoading ? (
@@ -97,7 +97,7 @@ const Home = ({ ...props }) => {
                 {filtered.map((tv, index) => {
                   return (
                     <Fragment key={index}>
-                      <Grid item xs={12} md={4} lg={3}>
+                      <Grid item xs={12} md={4} lg={3} key={tv.id}>
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}

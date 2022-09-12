@@ -15,7 +15,6 @@ import {
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -77,8 +76,8 @@ const Details = ({ ...props }) => {
                     <h1>{props.tv.name}</h1>
                     <h4>
                       {props.tv.first_air_date?.substring(0, 4)},
-                      {props.tv.created_by?.map((c) => {
-                        return <> {c.name} </>;
+                      {props.tv.created_by?.map((c, index) => {
+                        return <Fragment key={index}> {c.name} </Fragment>;
                       })}
                     </h4>
                     <p className="type">
@@ -125,7 +124,7 @@ const Details = ({ ...props }) => {
                       >
                         {props.tv.seasons?.map((s, index) => {
                           return (
-                            <MenuItem key={index} value={s.season_number}>
+                            <MenuItem key={s.id} value={s.season_number}>
                               {s.name} ({s.episode_count} episodes)
                             </MenuItem>
                           );
@@ -172,8 +171,13 @@ const Details = ({ ...props }) => {
                                 </ListItemAvatar>
                               </Grid>
                               <Grid item xs={8}>
-                                <Typography variant="h5" sx={{mt:1}}>{ep.name}</Typography>
-                                <Typography variant={'body1'} color={"GrayText"}>
+                                <Typography variant="h5" sx={{ mt: 1 }}>
+                                  {ep.name}
+                                </Typography>
+                                <Typography
+                                  variant={"body1"}
+                                  color={"GrayText"}
+                                >
                                   {ep.overview}
                                 </Typography>
                               </Grid>
