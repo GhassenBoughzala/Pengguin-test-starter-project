@@ -49,11 +49,11 @@ const WatchList = ({ ...props }) => {
   }, [SearchIn, filtered]);
 
   const RemoveShow = async (e) => {
-    const filtered = LocalWatch.filter((item, index) => index !== e);
+    const filtered = data.filter((item, index) => index !== e);
     localStorage.setItem("watchlist", JSON.stringify(filtered));
     window.location.reload();
   };
-  
+
   const uniqueIds = [];
   const data = LocalWatch.filter((element) => {
     const isDuplicate = uniqueIds.includes(element.id);
